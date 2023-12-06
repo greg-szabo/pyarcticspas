@@ -1,32 +1,30 @@
+""" Synchronous tests """
 import os
 import time
-from typing import Optional
 
 from pyarcticspas import LightState, Spa
 
-singleton_spa: Optional[Spa] = None
-
 
 def get_spa():
-    global singleton_spa
-    if singleton_spa is None:
-        token = os.environ.get("ARCTICSPAS_TOKEN")
-        assert token is not None
-        singleton_spa = Spa(token)
-    return singleton_spa
+    """Get the Spa object"""
+    token = os.environ.get("ARCTICSPAS_TOKEN")
+    assert token is not None
+    return Spa(token)
 
 
 def test_connected():
+    """Test: Check if API is reachable by polling for the current status."""
     spa = get_spa()
     status = spa.status()
     assert status.connected is True
 
 
 def test_lights():
+    """Test: Switch Arctic Spa light."""
     # Query light status
     spa = get_spa()
     spa_status = spa.status()
-    assert spa_status.lights == LightState["ON"] or spa_status.lights == LightState["OFF"]
+    assert spa_status.lights in (LightState["ON"], LightState["OFF"])
 
     # Create expected new state
     new_light_state = LightState["ON"]

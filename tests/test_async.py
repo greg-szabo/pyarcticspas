@@ -1,37 +1,27 @@
-import os
-from typing import Optional
-
+""" Async tests """
 import pytest
 
-from pyarcticspas import Pump, PumpState, Spa
+from pyarcticspas import Pump, PumpState
 
-singleton_spa: Optional[Spa] = None
+from .test_sync import get_spa
+
 pytest_plugins = ("pytest_asyncio",)
 
 
-def get_spa():
-    global singleton_spa
-    if singleton_spa is None:
-        token = os.environ.get("ARCTICSPAS_TOKEN")
-        assert token is not None
-        singleton_spa = Spa(token)
-    return singleton_spa
-
-
-# Todo: async calls are not working as expected. There is some issue with the underlying httpx reporting an exception.
-# @pytest.mark.asyncio
-# async def test_async_connected():
-#     spa = get_spa()
-#     status = await spa.async_status()
-#     assert status.connected is True
+@pytest.mark.asyncio
+async def test_async_connected():
+    """Test: Check if the code connected to the remote Arctic API."""
+    spa = get_spa()
+    status = await spa.async_status()
+    assert status.connected is True
 
 
 @pytest.mark.asyncio
 async def test_async_pump_turn_off():
+    """Test: Turn off pump if it's on."""
     spa = get_spa()
     spa_status = await spa.async_status()
     assert spa_status.connected is True
-    assert spa_status.pump1 == PumpState["ON"] or spa_status.pump1 == PumpState["OFF"]
 
     if spa_status.pump1 == PumpState["ON"]:
         await spa.async_set_pumps(Pump["VALUE_0"], PumpState["OFF"])

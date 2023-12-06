@@ -25,5 +25,3 @@ print(status.blower1.value) #on
 ```
 
 If you are using asynchronous calls, use the `async_` version of the calls.
-
-Note: Async calls are untested, use them at your own risk.

@@ -1,4 +1,4 @@
 """ Arctic Spas constants """
 
 
-_url = "https://api.myarcticspa.com"
+_URL = "https://api.myarcticspa.com"
