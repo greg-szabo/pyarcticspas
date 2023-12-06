@@ -8,18 +8,18 @@ from arcticspas.models import V2LightJsonBodyState as LightState
 from arcticspas.models import V2PumpJsonBodyState as PumpState
 from arcticspas.models import V2PumpPump as Pump
 from arcticspas.models import V2SDSJsonBodyState as SDSState
+from arcticspas.models import V2SpaResponse200 as SpaResponse
 from arcticspas.models import V2YESSJsonBodyState as YESSState
 
-from .asyncspa import AsyncSpa
 from .spa import Spa
 
 __all__ = (
-    "AsyncSpa",
     "Spa",
     "LightState",
     "Pump",
     "PumpState",
     "EasyModeState",
+    "SpaResponse",
     "SDSState",
     "YESSState",
     "FoggerState",

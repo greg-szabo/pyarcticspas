@@ -7,7 +7,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="pyarcticspas",
-    version="0.2.0",
+    version="0.2.1",
     description="A high-level client library for accessing Arctic Spas API",
     long_description=long_description,
     long_description_content_type="text/markdown",

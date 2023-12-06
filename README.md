@@ -24,5 +24,6 @@ print(status.lights.value) #on
 print(status.blower1.value) #on
 ```
 
-If you are using asynchronous calls, use the `AsyncSpa` class instead of the `Spa` class. All of the `AsyncSpa` functions
-are asynchronous.
+If you are using asynchronous calls, use the `async_` version of the calls.
+
+Note: Async calls are untested, use them at your own risk.
