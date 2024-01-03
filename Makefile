@@ -4,7 +4,7 @@ lint:
 test:
 	tox
 
-build-package:
+build:
 	rm -rf dist
 	tox -e build
 
