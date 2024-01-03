@@ -1,8 +1,6 @@
 """ Spa class creates an Arctic Spa connection for Python calls """
-import email.message
 from http import HTTPStatus
 from typing import Optional
-from urllib.error import HTTPError
 
 from arcticspas import Client
 from arcticspas.api.spa_control import (
@@ -39,18 +37,44 @@ from arcticspas.models import V2TemperatureJsonBody, V2YESSJsonBody
 from arcticspas.models import V2YESSJsonBodyState as YESSState
 from arcticspas.types import Response
 
+from pyarcticspas.error import (
+    ClientError,
+    EmptyResponseError,
+    InformationError,
+    RedirectionError,
+    ServerError,
+    SpaHTTPException,
+    TooManyRequestsError,
+    UnauthorizedError,
+)
+
 from .const import _URL
 
 
 def _filter_parsed(response: Response):
-    """Filter out the parsed content from an API response and raise a HTTPError, if necessary."""
-    if response.status_code == HTTPStatus.OK:
+    """
+    Filter out the parsed content from an API response.
+    Raise an exception if an error is returned or there is no content.
+    """
+    if response.status_code == HTTPStatus.OK:  # 200
         return response.parsed
-
-    msg = email.message.Message()
-    for k, v in response.headers.items():
-        msg.set_raw(k, v)
-    raise HTTPError(_URL, response.status_code, HTTPStatus(response.status_code).phrase, msg, None)
+    if response.status_code == HTTPStatus.TOO_MANY_REQUESTS:  # 429
+        raise TooManyRequestsError(response.status_code)
+    if response.status_code == HTTPStatus.UNAUTHORIZED:  # 401
+        raise UnauthorizedError(response.status_code)
+    if response.status_code >= HTTPStatus.INTERNAL_SERVER_ERROR:  # 500
+        raise ServerError(response.status_code)
+    if response.status_code >= HTTPStatus.BAD_REQUEST:  # 400
+        raise ClientError(response.status_code)
+    if response.status_code >= HTTPStatus.MULTIPLE_CHOICES:  # 300
+        raise RedirectionError(response.status_code)
+    if response.status_code >= HTTPStatus.CREATED:  # 201
+        if hasattr(response, "parsed"):
+            return response.parsed
+        raise EmptyResponseError(response.status_code)
+    if response.status_code >= HTTPStatus.CONTINUE:  # 100
+        raise InformationError(response.status_code)
+    raise SpaHTTPException(418)  # I'm a teapot - this should never happen.
 
 
 class Spa:

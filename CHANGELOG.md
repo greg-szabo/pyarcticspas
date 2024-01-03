@@ -1,3 +1,7 @@
+# v0.2.3
+- Implemented error messages instead of returning a HTTPStatus object.
+- `testpypi` workarounds removed. (The `arcticspas` library is now deployed.)
+
 # v0.2.2
 - Added pylint and fixed its concerns
 - Fixed tox calling setup.py directly.

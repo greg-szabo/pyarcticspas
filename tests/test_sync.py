@@ -3,6 +3,7 @@ import os
 import time
 
 from pyarcticspas import LightState, Spa
+from pyarcticspas.error import UnauthorizedError
 
 
 def get_spa():
@@ -10,6 +11,15 @@ def get_spa():
     token = os.environ.get("ARCTICSPAS_TOKEN")
     assert token is not None
     return Spa(token)
+
+
+def test_authentication_error():
+    """Test: No token should lead to Unauthorized error."""
+    spa = Spa("")
+    try:
+        spa.status()
+    except UnauthorizedError:
+        pass
 
 
 def test_connected():
