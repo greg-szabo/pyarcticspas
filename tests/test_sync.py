@@ -22,6 +22,14 @@ def test_authentication_error():
         pass
 
 
+def test_id():
+    """Test: ID property is hash of API token."""
+    spa = Spa("hello")
+    assert (
+        spa.id == "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+    )  # sha256 of hello
+
+
 def test_connected():
     """Test: Check if API is reachable by polling for the current status."""
     spa = get_spa()

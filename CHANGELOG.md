@@ -1,3 +1,6 @@
+# v0.2.4
+- Introduced `Spa.id` property
+
 # v0.2.3
 - Implemented error messages instead of returning a HTTPStatus object.
 - `testpypi` workarounds removed. (The `arcticspas` library is now deployed.)

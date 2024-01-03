@@ -1,4 +1,5 @@
 """ Spa class creates an Arctic Spa connection for Python calls """
+from hashlib import sha256
 from http import HTTPStatus
 from typing import Optional
 
@@ -80,8 +81,14 @@ def _filter_parsed(response: Response):
 class Spa:
     """Spa class defines high-level functions using the Arctic Spa API."""
 
+    @property
+    def id(self):
+        """Generated ID to distinguish different Spa entities."""
+        return self.__id
+
     def __init__(self, token: str):
         self.__client = Client(base_url=_URL, headers={"X-API-KEY": token})
+        self.__id = sha256(bytes(token, "utf8")).hexdigest()
 
     def status(self) -> SpaResponse:
         """Get ArcticSpa status object."""
